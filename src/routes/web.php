@@ -71,4 +71,13 @@ Route::middleware(['auth', 'admin'])
         Route::delete('/vehicles/{vehicle}', [\App\Http\Controllers\Admin\VehicleAdminController::class, 'destroy'])
             ->name('vehicles.destroy');
 
+        Route::get('/vehicles/{vehicle}/share/image', [VehicleAdminController::class, 'generateShareImage'])
+            ->name('vehicles.share.image');
+
+        Route::get('/vehicles/{vehicle}/share',[VehicleAdminController::class, 'shareSmart']
+            )->name('vehicles.share.smart');
+            
+        Route::get('vehicles/{vehicle}/share/file', [VehicleAdminController::class, 'shareFile'])
+        ->name('vehicles.share.file');
+
     });

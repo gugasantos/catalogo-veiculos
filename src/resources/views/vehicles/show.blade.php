@@ -157,6 +157,20 @@
             font-size: 13px;
             cursor: pointer;
         }
+        .hero-maps-btn{
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: none;
+            background: var(--brand-primary-dark);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
 
         .vehicle-meta-grid {
             display: grid;
@@ -311,6 +325,13 @@
                         </button>
                     </a>
                 @endif
+
+                <a href="https://www.google.com/maps/dir//WS+MULTIMARCASDF,+scia+quadra+15+conjunto+1+lote+08+-+Lago+Norte,+Bras%C3%ADlia+-+DF,+71250-005/@-15.8007296,-47.9307673,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x935a39ed485a698f:0x50b9e8323a55535c!2m2!1d-47.9141382!2d-15.7088813?entry=ttu&g_ep=EgoyMDI2MDEyMS4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hero-maps-btn">
+                        📍 Fazer uma Visita
+                </a>
 
 
                 <a href="{{ route('vehicles.index') }}">

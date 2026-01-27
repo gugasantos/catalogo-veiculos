@@ -21,12 +21,12 @@
             --brand-bg: #f1f5f9;
             --brand-bg-soft: #ffffff;
             --brand-primary: #0f172a;
-            --brand-primary-dark: #121212;
+            --brand-primary-dark: #c58a16;
             --brand-text-main: #0f172a;
             --brand-text-muted: #694747ff;
             --brand-border: #cbd5e1;
             --brand-toggle: #121212;
-            --brand-description: #c58a16;
+            --brand-description: #0E1118;
             --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             --font-heading: 'Poppins', system-ui, sans-serif;
             --brand-boton-header-color:rgba(196, 129, 5, 0.1);
@@ -42,7 +42,7 @@
             --brand-text-muted: #ffffff;
             --brand-border: #27272f;
             --brand-toggle: #ffffff;
-            --brand-description: #0f172a;
+            --brand-description: #0E1118;
             --brand-boton-header-color:rgba(247, 151, 6, 1)
         }
 

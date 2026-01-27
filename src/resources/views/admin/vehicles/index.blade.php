@@ -10,8 +10,8 @@
     }
 
     .panel {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
+        background: var(--brand-bg-soft);
+        border: 1px solid var(--brand-border);
         border-radius: 14px;
         padding: 14px 16px;
         box-shadow: 0 10px 22px rgba(0,0,0,.06);
@@ -84,7 +84,7 @@
         font-size: 13px;
         border-radius: 12px;
         border: 1px solid #cbd5e1;
-        background: #ffffff;
+        background: var(--brand-bg-soft);
         color: #0f172a;
         outline: none;
     }
@@ -95,6 +95,9 @@
         justify-content: flex-end;
         gap: 10px;
         flex-wrap: wrap;
+    }
+    .filters-select-option {
+        color: var(--brand-text-main);
     }
 
     @media (max-width: 950px) {
@@ -108,8 +111,8 @@
     .table-wrap {
         overflow: auto;
         border-radius: 14px;
-        border: 1px solid #e2e8f0;
-        background: #ffffff;
+        border: 1px solid var(--brand-border);
+        background: var(--brand-bg-soft);
     }
 
     table {
@@ -117,6 +120,7 @@
         border-collapse: collapse;
         min-width: 920px; /* rolagem horizontal em telas pequenas */
     }
+    
 
     thead th {
         text-align: left;
@@ -126,7 +130,7 @@
         letter-spacing: .02em;
         padding: 12px 12px;
         border-bottom: 1px solid #e2e8f0;
-        background: #f8fafc;
+        background: var(--brand-bg-soft);
         white-space: nowrap;
     }
 
@@ -394,6 +398,18 @@
                                         {{ $vehicle->status === 'hidden' ? 'Ativar' : 'Ocultar' }}
                                     </button>
                                 </form>
+
+                                <button
+                                type="button"
+                                class="btn btn-success js-share"
+                                data-share-url="{{ route('admin.vehicles.share.file', $vehicle) }}"
+                                data-title="{{ $vehicle->title }} {{ $vehicle->year }}"
+                                data-text="{{ "Confira este veículo 👇\nR$ ".number_format((float)$vehicle->price, 2, ',', '.')."\n\n".route('vehicles.show', $vehicle) }}"
+                                >
+                                📤 Compartilhar
+                                </button>
+
+
                             </div>
                         </td>
                     </tr>
@@ -408,10 +424,91 @@
             </table>
         </div>
 
-        <div style="padding: 12px 14px;">
+        <div style="padding: 12px 14px; background: var(--brand-bg-soft); border-top: 1px solid var(--brand-border);">
             {{ $vehicles->withQueryString()->links() }}
         </div>
     </div>
 
 </div>
+
+<script>
+(async function () {
+
+  async function fetchFile(url, filename = 'anuncio.jpg') {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Falha ao buscar imagem');
+    const blob = await res.blob();
+    return new File([blob], filename, { type: blob.type || 'image/jpeg' });
+  }
+
+  async function tryShare({ url, title, text }) {
+    // Share Sheet (quando suportado)
+    if (navigator.share) {
+      const file = await fetchFile(url, 'anuncio.jpg');
+
+      if (navigator.canShare && !navigator.canShare({ files: [file] })) {
+        throw new Error('Navegador não aceita compartilhar arquivo');
+      }
+
+      await navigator.share({ title, text, files: [file] });
+      return true;
+    }
+    return false;
+  }
+
+  async function copyImage(url) {
+    // fallback desktop bom: copiar imagem e colar no WhatsApp Web
+    if (!navigator.clipboard || !window.ClipboardItem) return false;
+
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return false;
+    const blob = await res.blob();
+
+    await navigator.clipboard.write([
+      new ClipboardItem({ [blob.type || 'image/jpeg']: blob })
+    ]);
+
+    return true;
+  }
+
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.js-share');
+    if (!btn) return;
+
+    const url = btn.dataset.shareUrl;
+    const title = btn.dataset.title || 'Anúncio';
+    const text = btn.dataset.text || '';
+
+    btn.disabled = true;
+
+    try {
+      // 1) tenta abrir Share Sheet direto
+      const ok = await tryShare({ url, title, text });
+      if (ok) return;
+
+      // 2) fallback: copia imagem e abre WhatsApp web com texto
+      const copied = await copyImage(url);
+      if (copied) {
+        alert('Imagem copiada! Agora cole no WhatsApp (Ctrl+V). Vou abrir o WhatsApp com a mensagem.');
+      } else {
+        alert('Seu navegador não suporta compartilhar/copiar imagem. Vou abrir a imagem em uma nova aba.');
+        window.open(url, '_blank', 'noopener');
+        return;
+      }
+
+      const wpp = "https://wa.me/?text=" + encodeURIComponent(text);
+      window.open(wpp, '_blank', 'noopener');
+
+    } catch (err) {
+      console.log(err);
+      alert('Não foi possível abrir o compartilhamento neste navegador. Vou abrir a imagem em uma nova aba.');
+      window.open(url, '_blank', 'noopener');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+})();
+</script>
+
 @endsection

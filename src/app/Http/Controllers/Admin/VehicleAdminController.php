@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\VehiclePhoto;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 
 
 class VehicleAdminController extends Controller
@@ -182,5 +185,108 @@ class VehicleAdminController extends Controller
             ->route('admin.vehicles.index')
             ->with('success', 'Veículo excluído com sucesso.');
     }
+
+  
+
+
+    private function buildShareImageUrl(Vehicle $vehicle): string
+    {
+        $photo = $vehicle->photos()->orderByDesc('is_cover')->orderBy('position')->first();
+        if (!$photo) abort(404, 'Veículo sem foto para compartilhar.');
+
+        $manager = new ImageManager(new Driver());
+        $img = $manager->read(storage_path('app/public/' . $photo->path));
+
+        // ✅ NÃO corta mais (mantém o formato original)
+        // opcional: só reduz se for gigante (mantém proporção)
+        $img = $img->scaleDown(2000, 2000);
+
+        $w = $img->width();
+        $h = $img->height();
+
+        // ✅ overlay proporcional ao tamanho da foto
+        $barHeight = max(140, (int) round($h * 0.18)); // 18% da altura (mín 140px)
+
+        $overlay = $manager->create($w, $barHeight)->fill('rgba(0,0,0,0.60)');
+        $img->place($overlay, 'bottom-left', 0, 0);
+
+        $fontPath = storage_path('app/fonts/Montserrat-Black.ttf');
+
+        $text = trim(
+            "{$vehicle->title} {$vehicle->year}"
+            . ($vehicle->description ? "  •  {$vehicle->description}" : "")
+            . "  •  R$ " . number_format((float)$vehicle->price, 2, ',', '.')
+        );
+
+        $maxWidth = $w - 120;
+
+        // ✅ tamanho de fonte proporcional
+        $fontSize = max(28, (int) round($w * 0.035)); // ex: 1080 => ~38
+        $y = $h - $barHeight + 30;
+
+        $img->text($text, 60, $y, function ($font) use ($fontPath, $maxWidth, $fontSize) {
+            $font->filename($fontPath);
+            $font->size($fontSize);
+            $font->color('ffffff');
+            $font->wrap($maxWidth); // pode quebrar linha se precisar
+            $font->align('left');
+            $font->valign('top');
+        });
+
+        $path = "share/vehicle-{$vehicle->id}.jpg";
+        Storage::disk('public')->put($path, (string) $img->toJpeg(90));
+
+        return asset("storage/$path");
+    }
+
+    public function generateShareImage(Vehicle $vehicle)
+    {
+        return redirect()->to($this->buildShareImageUrl($vehicle));
+    }
+
+
+    public function shareStatus(Vehicle $vehicle)
+    {
+        $imageUrl = $this->generateShareImage($vehicle);
+        $link = route('vehicles.show', $vehicle);
+
+        $text = urlencode("Confira este veículo 👇\n$link");
+
+        return redirect("https://wa.me/?text=$text");
+    }
+
+    public function shareSmart(Vehicle $vehicle)
+    {
+        $imageUrl = $this->buildShareImageUrl($vehicle);
+
+        $link = route('vehicles.show', $vehicle);
+        $text = "Confira este veículo 👇\n\n"
+            . "{$vehicle->title} {$vehicle->year}\n"
+            . "R$ " . number_format((float)$vehicle->price, 2, ',', '.') . "\n\n"
+            . $link;
+
+        return view('admin.vehicles.share-smart', compact('vehicle', 'imageUrl', 'text'));
+    }
+
+    public function shareFile(Vehicle $vehicle)
+    {
+        // gera/garante a imagem
+        $imageUrl = $this->buildShareImageUrl($vehicle); // do helper que criamos
+
+        // converte URL -> path do storage public
+        $path = "share/vehicle-{$vehicle->id}.jpg";
+
+        abort_unless(Storage::disk('public')->exists($path), 404);
+
+        return response()->file(
+            Storage::disk('public')->path($path),
+            [
+                'Content-Type' => 'image/jpeg',
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            ]
+        );
+    }
+
+
 
 }

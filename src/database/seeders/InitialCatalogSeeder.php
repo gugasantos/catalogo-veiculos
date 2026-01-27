@@ -21,7 +21,7 @@ class InitialCatalogSeeder extends Seeder
             [
                 'key'       => 'whatsapp_phone',
                 // formato internacional sem "+" (ex: 55DDDNUMERO)
-                'value'     => '5561999999999',
+                'value'     => '5561986118417',
                 'created_at'=> now(),
                 'updated_at'=> now(),
             ],

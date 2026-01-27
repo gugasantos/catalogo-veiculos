@@ -10,7 +10,7 @@
             gap: 24px;
             align-items: center;
             margin-bottom: 24px;
-
+            
             background: var(--brand-description);
             border-radius: 18px;
             padding: 22px;
@@ -21,20 +21,21 @@
             z-index: 0;
         }
         .hero::after {
-            z-index: -1;
             content: "";
             position: absolute;
             inset: 0;
+            z-index: -1;
 
-            background: url("{{ asset('img/logoloja.jpeg') }}") 
-                center
-                no-repeat;
-
-            background-size: 100%;   /* ← garante que NÃO corta a logo */
-            opacity: 0.09;              /* ajuste a intensidade */
+            background-image: url("{{ asset('img/logo.png') }}");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain; /* NÃO corta a logo */
+            background-size: 30%;
+            
+            /* opacity: 0.09; */
             pointer-events: none;
-            background-position: center 55%;
         }
+
         .hero-tag-pill {
             padding: 3px 9px;
             border-radius: 999px;
@@ -74,6 +75,7 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
+            margin-left: 20px;
         }
         .btn-hero-secondary {
             padding: 9px 16px;
@@ -94,11 +96,13 @@
         
 
         .hero-card {
-            background: var(--brand-primary-dark);
+            display: inline-block;
+            text-decoration: none;  
             border-radius: 18px;
-            padding: 16px;
+            padding: 10px;
             color: #e5e7eb;
-            box-shadow: 0 10px 20px var(--brand-primary-dark);
+            margin-left: 20px;
+
         }
         .hero-card-title {
             font-size: 16px;
@@ -109,15 +113,45 @@
             font-size: 13px;
             margin-bottom: 4px;
         }
-        .hero-card-pill {
-            display: inline-block;
-            margin-top: 8px;
-            font-size: 11px;
-            padding: 4px 8px;
+        .hero-right {
+            display: flex;
+            flex-direction: column;    /* um abaixo do outro */
+            align-items: flex-end;     /* alinhados à direita */
+            gap: 8px;                  /* espaço entre os botões */
+            height: 100%;
+            justify-content: center;   /* centraliza verticalmente no hero */
+        }
+
+        .hero-whatsapp-btn,
+        .hero-maps-btn {
+            width: max-content;   /* garante que mede pelo conteúdo */
+            min-width: 240px;     /* força ambos terem no mínimo a mesma largura */
+            justify-content: center; /* centraliza o texto */
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 8px 16px;
             border-radius: 999px;
-            background: rgba(15, 118, 110, 0.3);
+            font-size: 13px;
+            font-weight: 500;
+
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        /* WhatsApp */
+        .hero-whatsapp-btn {
+            background: rgba(15, 118, 75, 0.3);
             border: 1px solid #14b8a6;
             color: #a5f3fc;
+        }
+
+        /* Maps */
+        .hero-maps-btn {
+            background: rgba(234, 179, 8, 0.2); /* dourado suave */
+            border: 1px solid #eab308;
+            color: #fde68a;
         }
 
         .section-title {
@@ -148,17 +182,18 @@
         }
 
         .vehicle-card {
-            background: #ffffff;
+            background: var(--brand-bg-soft);
             border-radius: 14px;
             overflow: hidden;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--brand-border);
             display: flex;
             flex-direction: column;
+            color: var(--brand-text-main);
         }
         .vehicle-card-img {
             position: relative;
             padding-top: 62.5%;
-            background: #e2e8f0;
+            background: var(--brand-border);
             overflow: hidden;
         }
         .vehicle-card-img img {
@@ -241,19 +276,60 @@
         .cabecalho-principal{
             
         }
+        .hero-services {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 18px;
+            display: grid;
+            gap: 8px;
+            margin-left: 30px;
+        }
+
+        .hero-services li {
+            position: relative;
+            padding-left: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #d4af37; /* dourado elegante */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-services li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #d4af37;
+            border-radius: 50%;
+        }
+
+        .icon-whatsapp {
+            width: 16px;
+            height: 16px;
+            color: #25D366; /* verde oficial WhatsApp */
+            flex-shrink: 0;
+        }
+
+
     </style>
 
 
     {{-- HERO / CAPA --}}
+    
     <section class="hero">
         <div class="cabecalho-principal">
-            <h1 class="hero-title">
-                Bem-vindo à WS Multimarcas
-            </h1>
-            <p class="hero-subtitle">
-                Encontre seu próximo carro com praticidade. Veja os veículos disponíveis,
-                compare e fale direto com a loja pelo WhatsApp. Sem cadastro, sem burocracia.
-            </p>
+           
+            <ul class="hero-services">
+                <li>Compra</li>
+                <li>Venda</li>
+                <li>Troca</li>
+                <li>Consignação</li>
+            </ul>
+
 
             <div class="hero-actions">
                 <a href="{{ route('vehicles.index') }}">
@@ -263,48 +339,44 @@
                 </a>
 
                 @php
-                    $whats = \App\Models\SiteSetting::getValue('store_whatsapp');
+                    $whats = \App\Models\SiteSetting::getValue('whatsapp_phone');
                     $whatsLink = $whats
                         ? 'https://wa.me/'.$whats.'?text='.urlencode('Olá, vi o catálogo de veículos da '.$storeName.' e gostaria de mais informações.')
                         : null;
                 @endphp
 
-                @if($whatsLink)
-                    <a href="{{ $whatsLink }}" target="_blank" rel="noopener noreferrer">
-                        <button class="btn-hero-secondary">
-                            Falar no WhatsApp
-                        </button>
-                    </a>
-                @endif
+              
             </div>
 
-            <div class="hero-tags">
-                <span class="hero-tag-pill">Catálogo sempre atualizado</span>
-                <span class="hero-tag-pill">Contato direto com a loja</span>
-                <span class="hero-tag-pill">Sem necessidade de login</span>
-            </div>
+           
         </div>
 
         <div>
-            <div class="hero-card">
-                <div class="hero-card-title">
-                    Atendimento rápido pelo WhatsApp
-                </div>
-                <div class="hero-card-line">
-                    Tire dúvidas sobre financiamento, trocas e condições especiais.
-                </div>
-                <div class="hero-card-line">
-                    Enviamos fotos, vídeos e mais detalhes do veículo que você gostou.
-                </div>
+            <div class="hero-right">
+                <a href="{{ $whatsLink }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hero-whatsapp-btn">
 
-                @if($whatsLink)
-                    <a href="{{ $whatsLink }}" target="_blank" rel="noopener noreferrer">
-                        <div class="hero-card-pill">
-                            💬 Chamar agora no WhatsApp
-                        </div>
-                    </a>
-                @endif
+                    <svg class="icon-whatsapp" viewBox="0 0 32 32" aria-hidden="true">
+                        <path fill="#25D366"
+                            d="M16 2.9C8.77 2.9 2.9 8.77 2.9 16c0 2.62.8 5.05 2.17 7.06L3 29l6.16-2.03A12.95 12.95 0 0 0 16 29.1c7.23 0 13.1-5.87 13.1-13.1S23.23 2.9 16 2.9z"/>
+                        <path fill="#FFFFFF"
+                            d="M19.43 17.4c-.25-.12-1.46-.72-1.69-.8-.23-.08-.4-.12-.57.12-.17.25-.65.8-.8.97-.15.17-.3.19-.55.06-.25-.12-1.05-.39-2-.25-.75-.67-1.26-1.49-1.41-1.75-.15-.25-.02-.39.1-.51.11-.11.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.21-.5-.42-.43-.57-.43-.15 0-.32-.02-.49-.02-.17 0-.44.06-.68.32-.23.25-.9.87-.9 2.12s.92 2.47 1.05 2.63c.13.17 1.8 2.75 4.34 3.86.6.26 1.07.42 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.5-.61 1.7-1.2.21-.59.21-1.09.15-1.2-.06-.1-.23-.17-.49-.29z"/>
+                    </svg>
+
+                    Chamar agora no WhatsApp
+                </a>
+
+
+                <a href="https://www.google.com/maps/dir//WS+MULTIMARCASDF,+scia+quadra+15+conjunto+1+lote+08+-+Lago+Norte,+Bras%C3%ADlia+-+DF,+71250-005/@-15.8007296,-47.9307673,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x935a39ed485a698f:0x50b9e8323a55535c!2m2!1d-47.9141382!2d-15.7088813?entry=ttu&g_ep=EgoyMDI2MDEyMS4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hero-maps-btn">
+                    📍 Localização
+                </a>
             </div>
+
         </div>
     </section>
 
