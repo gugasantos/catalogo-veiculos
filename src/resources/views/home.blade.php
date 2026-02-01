@@ -35,6 +35,14 @@
             /* opacity: 0.09; */
             pointer-events: none;
         }
+        @media (max-width: 700px) {
+        .hero::after {
+            background-position: right 10px top 2px;
+            background-size: 160px auto; /* ajuste fino aqui */
+            opacity: 0.9;
+        }
+        }
+
 
         .hero-tag-pill {
             padding: 3px 9px;
@@ -153,6 +161,45 @@
             border: 1px solid #eab308;
             color: #fde68a;
         }
+        @media (max-width: 900px) {
+        .hero {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 16px;
+        }
+
+        /* Coluna da direita vira "normal" no mobile */
+        .hero-right {
+            align-items: stretch;       /* ao invés de flex-end */
+            justify-content: flex-start;
+            width: 100%;
+        }
+
+        /* Botões responsivos no mobile */
+        .hero-whatsapp-btn,
+        .hero-maps-btn {
+            width: 100%;                /* ocupa toda a largura */
+            min-width: 0;               /* remove o mínimo de 240px */
+            justify-content: center;    /* mantém o texto central */
+            white-space: normal;        /* permite quebrar linha */
+            text-align: center;
+        }
+
+        /* opcional: botão "Ver todos os veículos" não ficar deslocado */
+        .btn-hero-primary {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .hero-actions {
+            width: 100%;
+        }
+
+        .hero-actions a {
+            width: 100%;
+        }
+        }
+        
 
         .section-title {
             font-size: 22px;
