@@ -10,14 +10,14 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $email = 'admin@catalogo.test';
+        $email = 'ws@catalogo.admin';
 
         // se já existir, atualiza; senão cria
         DB::table('users')->updateOrInsert(
             ['email' => $email],
             [
                 'name'      => 'Administrador',
-                'password'  => Hash::make('senha123'), // troca depois!
+                'password'  => Hash::make('ws@2026*'), // troca depois!
                 'is_admin'  => true,
                 'created_at'=> now(),
                 'updated_at'=> now(),

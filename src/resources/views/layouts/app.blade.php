@@ -550,7 +550,7 @@
         <a href="{{ route('home') }}" class="brand-box">
             <img src="{{ asset('img/logoloja.jpeg') }}" alt="Logo" class="brand-logo">
             <span class="brand-name">
-                {{ \App\Models\SiteSetting::getValue('store_name', 'Loja de Carros') }}
+                {{ \App\Models\SiteSetting::getValue('store_name', 'Multimarcas') }}
             </span>
         </a>
 
@@ -578,7 +578,7 @@
 
 <footer>
     <div class="inner">
-        <span>&copy; {{ date('Y') }} {{ \App\Models\SiteSetting::getValue('store_name', 'Loja de Carros') }}</span>
+        <span>&copy; {{ date('Y') }} {{ \App\Models\SiteSetting::getValue('store_name', 'Multimarcas') }}</span>
         <span>
             {{ \App\Models\SiteSetting::getValue('store_city', 'Cidade') }}
             -

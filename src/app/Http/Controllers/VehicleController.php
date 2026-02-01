@@ -18,7 +18,7 @@ class VehicleController extends Controller
 
         return view('home', [
             'vehicles' => $featured,
-            'storeName' => SiteSetting::getValue('store_name', 'Loja de Carros'),
+            'storeName' => SiteSetting::getValue('store_name', 'Multimarcas'),
         ]);
     }
 
