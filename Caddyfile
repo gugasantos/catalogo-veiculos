@@ -1,0 +1,4 @@
+wsmultimarcasdf.com.br, www.wsmultimarcasdf.com.br {
+  encode gzip
+  reverse_proxy web:80
+}

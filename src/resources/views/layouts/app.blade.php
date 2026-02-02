@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
 
     <style>
@@ -580,9 +581,9 @@
     <div class="inner">
         <span>&copy; {{ date('Y') }} {{ \App\Models\SiteSetting::getValue('store_name', 'Multimarcas') }}</span>
         <span>
-            {{ \App\Models\SiteSetting::getValue('store_city', 'Cidade') }}
+            {{ \App\Models\SiteSetting::getValue('store_city', 'Brasília') }}
             -
-            {{ \App\Models\SiteSetting::getValue('store_state', 'UF') }}
+            {{ \App\Models\SiteSetting::getValue('store_state', 'DF') }}
         </span>
     </div>
 </footer>
