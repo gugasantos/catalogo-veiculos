@@ -221,7 +221,7 @@
         $photos = $vehicle->photos ?? collect();
         $cover = $vehicle->coverPhoto ?? $photos->first();
 
-        $storeWhats = \App\Models\SiteSetting::getValue('store_whatsapp');
+        $storeWhats = \App\Models\SiteSetting::getValue('whatsapp_phone');
         $whatsNumber = $vehicle->whatsapp_number ?? $storeWhats;
 
         $whatsLink = $vehicle->whatsapp_link;

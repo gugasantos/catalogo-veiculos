@@ -386,11 +386,13 @@
                 </a>
 
                 @php
-                    $whats = \App\Models\SiteSetting::getValue('whatsapp_phone');
-                    $whatsLink = $whats
-                        ? 'https://wa.me/'.$whats.'?text='.urlencode('Olá, vi o catálogo de veículos da '.$storeName.' e gostaria de mais informações.')
-                        : null;
+                    $whatsRaw = \App\Models\SiteSetting::getValue('whatsapp_phone'); // CONFERE ESSA CHAVE
+                    $whats = preg_replace('/\D+/', '', (string) $whatsRaw);
+
+                    $msg = 'Olá, vi o catálogo de veículos da '.$storeName.' e gostaria de mais informações.';
+                    $whatsLink = $whats ? 'https://wa.me/'.$whats.'?text='.urlencode($msg) : null;
                 @endphp
+
 
               
             </div>
@@ -400,20 +402,17 @@
 
         <div>
             <div class="hero-right">
-                <a href="{{ $whatsLink }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hero-whatsapp-btn">
-
+                @if(!empty($whatsLink))
+                <a href="{{ $whatsLink }}" target="_blank" rel="noopener noreferrer" class="hero-whatsapp-btn">
                     <svg class="icon-whatsapp" viewBox="0 0 32 32" aria-hidden="true">
                         <path fill="#25D366"
                             d="M16 2.9C8.77 2.9 2.9 8.77 2.9 16c0 2.62.8 5.05 2.17 7.06L3 29l6.16-2.03A12.95 12.95 0 0 0 16 29.1c7.23 0 13.1-5.87 13.1-13.1S23.23 2.9 16 2.9z"/>
                         <path fill="#FFFFFF"
                             d="M19.43 17.4c-.25-.12-1.46-.72-1.69-.8-.23-.08-.4-.12-.57.12-.17.25-.65.8-.8.97-.15.17-.3.19-.55.06-.25-.12-1.05-.39-2-.25-.75-.67-1.26-1.49-1.41-1.75-.15-.25-.02-.39.1-.51.11-.11.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.21-.5-.42-.43-.57-.43-.15 0-.32-.02-.49-.02-.17 0-.44.06-.68.32-.23.25-.9.87-.9 2.12s.92 2.47 1.05 2.63c.13.17 1.8 2.75 4.34 3.86.6.26 1.07.42 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.5-.61 1.7-1.2.21-.59.21-1.09.15-1.2-.06-.1-.23-.17-.49-.29z"/>
                     </svg>
-
                     Chamar agora no WhatsApp
                 </a>
+                @endif
 
 
                 <a href="https://www.google.com/maps/dir//WS+MULTIMARCASDF,+scia+quadra+15+conjunto+1+lote+08+-+Lago+Norte,+Bras%C3%ADlia+-+DF,+71250-005/@-15.8007296,-47.9307673,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x935a39ed485a698f:0x50b9e8323a55535c!2m2!1d-47.9141382!2d-15.7088813?entry=ttu&g_ep=EgoyMDI2MDEyMS4wIKXMDSoASAFQAw%3D%3D"

@@ -1,4 +1,7 @@
+http://wsmultimarcasdf.com.br, http://www.wsmultimarcasdf.com.br {
+    redir https://{host}{uri} permanent
+}
+
 wsmultimarcasdf.com.br, www.wsmultimarcasdf.com.br {
-  encode gzip
-  reverse_proxy web:80
+    reverse_proxy web:80
 }

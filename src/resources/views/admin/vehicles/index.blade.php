@@ -4,237 +4,225 @@
 
 @section('content')
 <style>
-    .admin-wrap {
-        display: grid;
-        gap: 14px;
+  .admin-wrap { display: grid; gap: 14px; }
+
+  .panel{
+    background: var(--brand-bg-soft);
+    border: 1px solid var(--brand-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  }
+
+  .admin-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .admin-title{
+    margin:0;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-0.2px;
+    color: var(--brand-text-main);
+  }
+
+  .admin-subtitle{
+    margin:4px 0 0;
+    font-size:13px;
+    color: var(--brand-text-muted);
+  }
+
+  .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:800;
+    border:1px solid var(--brand-border);
+    background: var(--brand-bg-main);
+    color: var(--brand-text-main);
+    cursor:pointer;
+    text-decoration:none;
+    user-select:none;
+    transition: transform .08s ease, box-shadow .12s ease, filter .12s ease;
+  }
+  .btn:hover{ box-shadow: 0 10px 16px rgba(0,0,0,.07); filter: brightness(.99); }
+  .btn:active{ transform: translateY(1px); }
+
+  /* Botão principal (mesmo padrão do salvar) */
+  .btn-primary{
+    background:#0f766e;
+    border-color:#0f766e;
+    color:#fff;
+  }
+  .btn-primary:hover{ background:#0d5f59; border-color:#0d5f59; }
+
+  /* Botão danger (logout por exemplo) */
+  .btn-danger{
+    background:#b91c1c;
+    border-color:#b91c1c;
+    color:#fff;
+  }
+  .btn-danger:hover{ background:#991b1b; border-color:#991b1b; }
+
+  .filters{
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap:12px;
+  }
+
+  .filters input, .filters select{
+    width:100%;
+    padding:9px 10px;
+    font-size:13px;
+    border-radius:12px;
+    border:1px solid var(--brand-border);
+    background: var(--brand-bg-main);
+    color: var(--brand-text-main);
+    outline:none;
+  }
+
+  .filters input:focus, .filters select:focus{
+    border-color: rgba(20,184,166,.65);
+    box-shadow: 0 0 0 3px rgba(20,184,166,.18);
+  }
+
+  .filters-actions{
+    margin-top:10px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  @media (max-width: 950px){
+    .filters{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 620px){
+    .filters{ grid-template-columns: 1fr; }
+    .filters-actions .btn{ width:100%; }
+  }
+
+  .table-wrap{
+    overflow:auto;
+    border-radius:14px;
+    border:1px solid var(--brand-border);
+    background: var(--brand-bg-soft);
+  }
+
+  table{ width:100%; border-collapse:collapse; min-width:920px; }
+
+  thead th{
+    text-align:left;
+    font-size:12px;
+    color: var(--brand-text-muted);
+    font-weight:800;
+    letter-spacing:.02em;
+    padding:12px 12px;
+    border-bottom:1px solid var(--brand-border);
+    background: var(--brand-bg-soft);
+    white-space:nowrap;
+  }
+
+  tbody td{
+    padding:12px 12px;
+    border-bottom:1px solid var(--brand-border);
+    font-size:13px;
+    color: var(--brand-text-main);
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+
+  tbody tr:hover{ filter: brightness(.98); }
+
+  .vehicle-cell{ display:flex; align-items:center; gap:10px; min-width:320px; }
+
+  .thumb{
+    width:54px;
+    height:40px;
+    border-radius:10px;
+    background: var(--brand-border);
+    overflow:hidden;
+    flex:0 0 auto;
+    border:1px solid var(--brand-border);
+  }
+  .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .v-title{ font-weight:800; font-size:13px; margin:0; line-height:1.1; color: var(--brand-text-main); }
+  .v-meta{ margin:4px 0 0; font-size:12px; color: var(--brand-text-muted); line-height:1.1; }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+    border:1px solid var(--brand-border);
+    background: var(--brand-bg-main);
+    color: var(--brand-text-main);
+  }
+
+  .pill-available{ background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.35); color: #16a34a; }
+  .pill-sold{      background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.30); color: #dc2626; }
+  .pill-hidden{    background: rgba(234,179,8,.15); border-color: rgba(234,179,8,.35); color: #b45309; }
+  .pill-featured{  background: rgba(234,179,8,.15); border-color: rgba(234,179,8,.35); color: #b45309; }
+
+    .row-actions{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    flex-wrap:nowrap;   /* impede quebra */
+    align-items:center;
     }
 
-    .panel {
-        background: var(--brand-bg-soft);
-        border: 1px solid var(--brand-border);
-        border-radius: 14px;
-        padding: 14px 16px;
-        box-shadow: 0 10px 22px rgba(0,0,0,.06);
-    }
+  .btn-sm{
+    padding:7px 10px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:900;
+    border:1px solid var(--brand-border);
+    background: var(--brand-bg-main);
+    color: var(--brand-text-main);
+    cursor:pointer;
+    text-decoration:none;
+  }
 
-    .admin-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
+  .btn-sm-green{
+    background:#0f766e;
+    border-color:#0f766e;
+    color:#fff;
+  }
+  .btn-sm-green:hover{ background:#0d5f59; border-color:#0d5f59; }
 
-    .admin-title {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 800;
-        letter-spacing: -0.2px;
-        color: #0f172a;
-    }
+  .btn-sm-red{
+    background:#b91c1c;
+    border-color:#b91c1c;
+    color:#fff;
+  }
+  .btn-sm-red:hover{ background:#991b1b; border-color:#991b1b; }
 
-    .admin-subtitle {
-        margin: 4px 0 0;
-        font-size: 13px;
-        color: #64748b;
-    }
+  /* Compartilhar (um azul/neutral forte) */
+  .btn-success{
+    background:#1d4ed8;
+    border-color:#1d4ed8;
+    color:#fff;
+  }
+  .btn-success:hover{ background:#1e40af; border-color:#1e40af; }
 
-    .actions {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border-radius: 12px;
-        font-size: 13px;
-        font-weight: 700;
-        border: 1px solid #cbd5e1;
-        background: #ffffff;
-        color: #0f172a;
-        cursor: pointer;
-        text-decoration: none;
-        user-select: none;
-        transition: transform .08s ease, box-shadow .08s ease;
-    }
-    .btn:hover { box-shadow: 0 10px 16px rgba(0,0,0,.07); }
-    .btn:active { transform: translateY(1px); }
-
-    .btn-primary {
-        border: none;
-        background: #0284c7;
-        color: #ffffff;
-    }
-
-    .filters {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .filters input, .filters select {
-        width: 100%;
-        padding: 9px 10px;
-        font-size: 13px;
-        border-radius: 12px;
-        border: 1px solid #cbd5e1;
-        background: var(--brand-bg-soft);
-        color: #0f172a;
-        outline: none;
-    }
-
-    .filters-actions {
-        margin-top: 10px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-    .filters-select-option {
-        color: var(--brand-text-main);
-    }
-
-    @media (max-width: 950px) {
-        .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 620px) {
-        .filters { grid-template-columns: 1fr; }
-        .filters-actions .btn { width: 100%; }
-    }
-
-    .table-wrap {
-        overflow: auto;
-        border-radius: 14px;
-        border: 1px solid var(--brand-border);
-        background: var(--brand-bg-soft);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 920px; /* rolagem horizontal em telas pequenas */
-    }
-    
-
-    thead th {
-        text-align: left;
-        font-size: 12px;
-        color: #64748b;
-        font-weight: 800;
-        letter-spacing: .02em;
-        padding: 12px 12px;
-        border-bottom: 1px solid #e2e8f0;
-        background: var(--brand-bg-soft);
-        white-space: nowrap;
-    }
-
-    tbody td {
-        padding: 12px 12px;
-        border-bottom: 1px solid #eef2f7;
-        font-size: 13px;
-        color: #0f172a;
-        vertical-align: middle;
-        white-space: nowrap;
-    }
-
-    tbody tr:hover {
-        background: #f8fafc;
-    }
-
-    .vehicle-cell {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-width: 320px;
-    }
-
-    .thumb {
-        width: 54px;
-        height: 40px;
-        border-radius: 10px;
-        background: #e2e8f0;
-        overflow: hidden;
-        flex: 0 0 auto;
-        border: 1px solid #e2e8f0;
-    }
-    .thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .v-title {
-        font-weight: 800;
-        font-size: 13px;
-        margin: 0;
-        line-height: 1.1;
-    }
-    .v-meta {
-        margin: 4px 0 0;
-        font-size: 12px;
-        color: #64748b;
-        line-height: 1.1;
-    }
-
-    .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 800;
-        border: 1px solid #e2e8f0;
-        background: #ffffff;
-        color: #0f172a;
-    }
-
-    .pill-available { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
-    .pill-sold      { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
-    .pill-hidden    { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
-
-    .pill-featured  { background: #fff7ed; border-color: #fdba74; color: #9a3412; }
-
-    .row-actions {
-        display: flex;
-        gap: 8px;
-        justify-content: flex-end;
-    }
-
-    .btn-sm {
-        padding: 7px 10px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 800;
-        border: 1px solid #cbd5e1;
-        background: #ffffff;
-        color: #0f172a;
-    }
-
-    .btn-sm-green {
-        border: none;
-        background: #22c55e;
-        color: #ffffff;
-    }
-
-    .btn-sm-red {
-        border: none;
-        background: #ef4444;
-        color: #ffffff;
-    }
-
-    .muted {
-        color: #64748b;
-        font-size: 12px;
-    }
+  .muted{ color: var(--brand-text-muted); font-size:12px; }
 </style>
+
 
 <div class="admin-wrap">
 
@@ -250,9 +238,8 @@
         <div class="actions">
              <form method="POST" action="{{ route('logout') }}" class="logout-form">
                  @csrf
-                <button type="submit" class="btn-logout">
-                Sair
-                </button>
+                <button type="submit" class="btn btn-danger">Sair</button>
+
             </form>
             <a href="{{ route('home') }}" class="btn">← Voltar ao site</a>
 
@@ -399,7 +386,7 @@
                                     </button>
                                 </form>
 
-                                <button
+                                <!-- <button
                                 type="button"
                                 class="btn btn-success js-share"
                                 data-share-url="{{ route('admin.vehicles.share.file', $vehicle) }}"
@@ -407,7 +394,7 @@
                                 data-text="{{ "Confira este veículo 👇\nR$ ".number_format((float)$vehicle->price, 2, ',', '.')."\n\n".route('vehicles.show', $vehicle) }}"
                                 >
                                 📤 Compartilhar
-                                </button>
+                                </button> -->
 
 
                             </div>

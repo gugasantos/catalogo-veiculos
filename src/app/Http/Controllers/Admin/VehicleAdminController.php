@@ -105,6 +105,17 @@ class VehicleAdminController extends Controller
 
     public function store(Request $request)
     {
+        // 🔥 Normaliza preço antes da validação
+        if ($request->filled('price')) {
+            $price = preg_replace('/[^0-9,\.]/', '', $request->price);
+            $price = str_replace('.', '', $price);   // remove milhar
+            $price = str_replace(',', '.', $price); // vírgula -> ponto
+
+            $request->merge([
+                'price' => $price
+            ]);
+        }
+
         $data = $this->validateVehicle($request);
         $data['featured'] = $request->boolean('featured');
 
@@ -122,10 +133,11 @@ class VehicleAdminController extends Controller
         $vehicle = \App\Models\Vehicle::create($data);
         $this->handleUploads($request, $vehicle);
 
-        
-
-        return redirect()->route('admin.vehicles.edit', $vehicle)->with('success','Veículo criado!');
+        return redirect()
+            ->route('admin.vehicles.edit', $vehicle)
+            ->with('success','Veículo criado!');
     }
+
 
 
 

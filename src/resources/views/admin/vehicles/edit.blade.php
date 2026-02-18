@@ -4,16 +4,145 @@
 
 @section('content')
 <style>
-  .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;box-shadow:0 10px 28px rgba(0,0,0,.06);}
-  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-  .field-wide{grid-column:1 / -1;}
-  .field label{display:block;font-size:12px;color:#64748b;margin-bottom:6px;font-weight:600;}
-  .field input,.field select,.field textarea{width:100%;padding:10px 10px;border-radius:10px;border:1px solid #cbd5e1;font-size:14px;}
-  .check{display:flex;gap:8px;align-items:center;}
-  .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
-  .btn{padding:10px 14px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;cursor:pointer}
-  .btn-primary{background:#0284c7;border-color:#0284c7;color:#fff;}
-  @media(max-width:720px){.form-grid{grid-template-columns:1fr;}}
+  .card{
+    background: var(--brand-bg-soft);
+    border: 1px solid var(--brand-border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.06);
+  }
+
+  .page-title{
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--brand-text-main);
+  }
+
+  .page-sub{
+    margin: 0 0 14px;
+    color: var(--brand-text-muted);
+    font-size: 13px;
+  }
+
+  .alert-success{
+    background: rgba(34,197,94,.12);
+    border: 1px solid rgba(34,197,94,.35);
+    color: var(--brand-text-main);
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .alert-error{
+    background: rgba(239,68,68,.12);
+    border: 1px solid rgba(239,68,68,.30);
+    color: var(--brand-text-main);
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .form-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .field-wide{ grid-column: 1 / -1; }
+
+  .field label{
+    display: block;
+    font-size: 12px;
+    color: var(--brand-text-muted);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .field input,
+  .field select,
+  .field textarea{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--brand-border);
+    background: var(--brand-bg-main);
+    color: var(--brand-text-main);
+    font-size: 14px;
+    outline: none;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus{
+    border-color: rgba(20,184,166,.65);
+    box-shadow: 0 0 0 3px rgba(20,184,166,.18);
+  }
+
+  .check{
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--brand-text-main);
+  }
+
+  .actions-row{
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn{
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--brand-border);
+    background: var(--brand-bg-main);
+    color: var(--brand-text-main);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .btn:hover{ filter: brightness(.98); }
+
+  .btn-primary{
+  background: #0f766e;       /* verde sólido */
+  border: 1px solid #0f766e;
+  color: #ffffff;
+  }
+
+  .btn-primary:hover{
+    background: #0d5f59;
+    border-color: #0d5f59;
+  }
+
+  .btn-danger{
+    background: #b91c1c;       /* vermelho sólido */
+    border: 1px solid #b91c1c;
+    color: #ffffff;
+  }
+
+  .btn-danger:hover{
+    background: #991b1b;
+    border-color: #991b1b;
+  }
+
+
+  @media(max-width:720px){
+    .form-grid{ grid-template-columns: 1fr; }
+    .actions-row{
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .btn, .btn-danger{
+      width: 100%;
+      text-align: center;
+    }
+  }
 </style>
 
 <div class="card">

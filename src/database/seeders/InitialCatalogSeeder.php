@@ -14,7 +14,7 @@ class InitialCatalogSeeder extends Seeder
         DB::table('site_settings')->insert([
             [
                 'key'       => 'store_name',
-                'value'     => env('APP_NAME', 'Catálogo de Carros'),
+                'value'     => env('APP_NAME', 'Multimarcas'),
                 'created_at'=> now(),
                 'updated_at'=> now(),
             ],

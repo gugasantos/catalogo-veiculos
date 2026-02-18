@@ -10,7 +10,7 @@
 
   <div class="field">
     <label>Preço (R$)</label>
-    <input type="number" step="0.01" name="price" value="{{ old('price', $vehicle->price ?? '') }}">
+    <input type="number" step="0.01" name="price"  inputmode="decimal" placeholder="Ex: 89.990,00" value="{{ old('price', $vehicle->price ?? '') }}">
   </div>
 
   <div class="field">
